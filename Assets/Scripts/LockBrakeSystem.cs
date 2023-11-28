@@ -74,7 +74,7 @@ public class LockBrakeSystem : MonoBehaviour
 
         /*Debug.Log($"value {value}");
         Debug.Log($"_lockPhase {_lockPhase}");
-        Debug.Log($"_lockPhase {_lockFailScoreSum}");*/
+        Debug.Log($"_picklockPhase {_picklockPhase}");*/
     }
 
     private void SetLockColor(float value)

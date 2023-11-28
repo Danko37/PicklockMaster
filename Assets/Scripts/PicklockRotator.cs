@@ -18,14 +18,14 @@ public class PicklockRotator : MonoBehaviour
 
     void Update()
     {
-        _phase += -Input.GetAxis("Mouse X") * Time.deltaTime * 10f;
+        _phase += Input.GetAxis("Mouse X") * Time.deltaTime * 10f;
         
         _phase = Math.Clamp(_phase, 0f, 1f);
         
-        //Debug.Log($"_phase {_phase}");
+        Debug.Log($"_phase {_phase}");
         PicklockRotationEvent?.Invoke(_phase);
 
-        _rotation.z = Mathf.Lerp(-90, 90, _phase);
+        _rotation.z = Mathf.Lerp(90, -90, _phase);
         
         _lockRect.rotation = Quaternion.Euler(_rotation);
         
