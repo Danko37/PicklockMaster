@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class LockRotator : MonoBehaviour
 {
-    public static event Action<float> LockRotationEvent;
+    public static event Action<float> LockPhaseEvent;
+    public static event Action<bool> LockRotationPressedEvent;
     private RectTransform _lockRect;
 
     private float _phase = 0;
@@ -27,15 +28,17 @@ public class LockRotator : MonoBehaviour
         {
             if (!isStopRotation)
             {
+                LockRotationPressedEvent?.Invoke(true);
                 _phase += Time.deltaTime;
             }
         }
         else if(!Input.GetKey(KeyCode.D) && _phase >= 0f)
         {
+            LockRotationPressedEvent?.Invoke(false);
             _phase -= Time.deltaTime;
         }
 
-        LockRotationEvent?.Invoke(_phase);
+        LockPhaseEvent?.Invoke(_phase);
         
         _rotation.z = Mathf.Lerp(0, -90, _phase);
         

@@ -37,7 +37,7 @@ public class LockBrakeSystem : MonoBehaviour
         PicklockHealh = 100;
         
         PicklockRotator.PicklockRotationEvent += PicklockRotationEventHandler;
-        LockRotator.LockRotationEvent += LockRotationEventHandler;
+        LockRotator.LockPhaseEvent += LockPhaseEventHandler;
 
         App.RestartAction += () =>
         {
@@ -52,6 +52,7 @@ public class LockBrakeSystem : MonoBehaviour
         
         SetLockColor(value);
 
+        //событие не правильного отпирания
         if (_lockPhase > value)
         {
             ErrorBreackAction?.Invoke(true);
@@ -62,11 +63,13 @@ public class LockBrakeSystem : MonoBehaviour
             ErrorBreackAction?.Invoke(false);
         }
 
+        //отмычка сломалась
         if (PicklockHealh <= 0f)
         {
             LoseAction?.Invoke();
         }
 
+        //замок открыт
         if (_lockPhase >= 1f)
         {
             WinAction?.Invoke();
@@ -95,7 +98,7 @@ public class LockBrakeSystem : MonoBehaviour
         }
     }
 
-    private void LockRotationEventHandler(float phase) => _lockPhase = phase;
+    private void LockPhaseEventHandler(float phase) => _lockPhase = phase;
 
     private void PicklockRotationEventHandler(float phase) => _picklockPhase = phase;
 }
