@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class App : MonoBehaviour
@@ -43,9 +41,6 @@ public class App : MonoBehaviour
         WinForm.SetActive(false);
         LoseForm.SetActive(false);
         
-        Debug.Log(LoseForm.activeSelf);
-        
         Cursor.visible = false;
-        
     }
 }

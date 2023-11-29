@@ -3,12 +3,35 @@ using UnityEngine;
 
 public class LockRotator : MonoBehaviour
 {
+    //событие поворота личинки замка (передает его фазу вращения)
     public static event Action<float> LockPhaseEvent;
+    
+    //событие нажатия на кнопку вращения личины замка
     public static event Action<bool> LockRotationPressedEvent;
+    
     private RectTransform _lockRect;
 
     private float _phase = 0;
     private Vector3 _rotation;
+
+    private bool _lockRotationPressed;
+    
+    //свойство для однократного вызова события нажатия на кнопку вращения личины
+    public bool LockRotationPressed {
+        get
+        {
+            return _lockRotationPressed;
+        }
+        private set
+        {
+            if (value != _lockRotationPressed)
+            {
+                LockRotationPressedEvent?.Invoke(value);  
+            }
+
+            _lockRotationPressed = value;
+        }
+    }
 
     private bool isStopRotation;
     private void Awake()
@@ -28,13 +51,13 @@ public class LockRotator : MonoBehaviour
         {
             if (!isStopRotation)
             {
-                LockRotationPressedEvent?.Invoke(true);
+                LockRotationPressed = true;
                 _phase += Time.deltaTime;
             }
         }
         else if(!Input.GetKey(KeyCode.D) && _phase >= 0f)
         {
-            LockRotationPressedEvent?.Invoke(false);
+            LockRotationPressed = false;
             _phase -= Time.deltaTime;
         }
 
