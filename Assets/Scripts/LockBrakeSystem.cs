@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class LockBrakeSystem : MonoBehaviour
 {
     public static event Action WinAction;
-    public static event Action LoseAction;
+    public static event Action PickLockBrocked;
     public static event Action<bool> ErrorBreackAction;
     public static event Action<int> PicklockHealhChangeAction;
     
@@ -88,7 +88,7 @@ public class LockBrakeSystem : MonoBehaviour
         //отмычка сломалась
         if (PicklockHealhProperty <= 0f)
         {
-            LoseAction?.Invoke();
+            PickLockBrocked?.Invoke();
         }
 
         //замок открыт
