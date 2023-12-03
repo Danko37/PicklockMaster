@@ -26,7 +26,7 @@ public class App : MonoBehaviour
         LockBrakeGameSystem.PickLockBrocked += OnPickLockBrockedHandler;
         LockBrakeGameSystem.WinAction += OnWinEventHandler;
     }
-    
+
     private void OnPickLockBrockedHandler()
     {
         NumberОfTries -= 1;

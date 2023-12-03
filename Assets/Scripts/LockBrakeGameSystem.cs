@@ -10,15 +10,10 @@ public class LockBrakeGameSystem : IGameSystem
     public static event Action<bool> ErrorBreackAction;
     public static event Action<int> PicklockHealhChangeAction;
     
-    [SerializeField] private Image[] Lock;
-
-    [SerializeField] private Color _normalLockColor = Color.white;
-    [SerializeField] private Color _failLockColor = new Color(1,0.7f,0.7f);
-    
     /// <summary>
     /// Описание сложности замка 
     /// </summary>
-    [SerializeField] private AnimationCurve _curve;
+    
     
     //врощаем личину
     private bool _lockRotatePressed;
@@ -70,8 +65,6 @@ public class LockBrakeGameSystem : IGameSystem
 
     public async UniTaskVoid Run()
     {
-        PicklockHealhProperty = 100;
-        
         PicklockRotator.PicklockRotationEvent += PicklockRotationEventHandler;
         LockRotator.LockPhaseEvent += LockPhaseEventHandler;
         LockRotator.LockRotationPressedEvent += b => _lockRotatePressed = b;
@@ -90,11 +83,16 @@ public class LockBrakeGameSystem : IGameSystem
         await UniTask.Yield();
     }
 
+    private void LoadParams()
+    {
+        
+    }
+
     public async UniTaskVoid UpdateSystem()
     {
         while (LockBrakeSystemIsRun)
         {
-            var value = Mathf.Clamp(_curve.Evaluate(_picklockPhase),0f,1f);
+            /*var value = Mathf.Clamp(_curve.Evaluate(_picklockPhase),0f,1f);
         
             SetLockColor(value);
 
@@ -122,26 +120,13 @@ public class LockBrakeGameSystem : IGameSystem
                 WinAction?.Invoke();
             }
 
-            await UniTask.NextFrame();
+            await UniTask.NextFrame();*/
         }
     }
 
     private void SetLockColor(float value)
     {
-        if (_lockPhase > value && _lockRotatePressed)
-        {
-            foreach (var image in Lock)
-            {
-                image.color = _failLockColor;
-            }
-        }
-        else
-        {
-            foreach (var image in Lock)
-            {
-                image.color = _normalLockColor;
-            } 
-        }
+        
     }
 
     private void LockPhaseEventHandler(float phase) => _lockPhase = phase;

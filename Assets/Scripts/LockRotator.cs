@@ -1,13 +1,13 @@
-using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LockRotator : MonoBehaviour
 {
     //событие поворота личинки замка (передает его фазу вращения)
-    public static event Action<float> LockPhaseEvent;
-    
+    public UnityEvent<float> LockPhaseEvent;
+
     //событие нажатия на кнопку вращения личины замка
-    public static event Action<bool> LockRotationPressedEvent;
+    public UnityEvent<bool> LockRotationPressedEvent;
     
     private RectTransform _lockRect;
 
@@ -45,8 +45,6 @@ public class LockRotator : MonoBehaviour
 
     void Update()
     {
-        //_phase = Mathf.InverseLerp(0,-1,-Input.GetAxis("Horizontal"));
-
         if (Input.GetKey(KeyCode.D) && _phase <= 1f)
         {
             if (!isStopRotation)

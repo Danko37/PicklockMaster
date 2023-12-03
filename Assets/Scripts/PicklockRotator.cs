@@ -15,7 +15,12 @@ public class PicklockRotator : MonoBehaviour
         _pickLockRect = GetComponent<RectTransform>();
         _rotation = _pickLockRect.rotation.eulerAngles;
         App.RestartAction += (() => { _phase = 0.5f; });
-        LockRotator.LockRotationPressedEvent += b => _locked = b;
+        //LockRotator.LockRotationPressedEvent += b => _locked = b;
+    }
+
+    public void LockRotationPressedEventHandler(bool lockIsRotated)
+    {
+        _locked = lockIsRotated;
     }
 
     void Update()
@@ -32,7 +37,5 @@ public class PicklockRotator : MonoBehaviour
         _rotation.z = Mathf.Lerp(90, -90, _phase);
         
         _pickLockRect.rotation = Quaternion.Euler(_rotation);
-        
-        //Debug.Log($"Picklock _phase = {_phase}, _rotation.z = _rotation.z = {_rotation.z},_lockRect.rotation = {_lockRect.rotation.eulerAngles} ");
     }
 }
