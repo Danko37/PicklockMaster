@@ -1,8 +1,9 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LockBrakeSystem : MonoBehaviour
+public class LockBrakeGameSystem : IGameSystem
 {
     public static event Action WinAction;
     public static event Action PickLockBrocked;
@@ -18,13 +19,17 @@ public class LockBrakeSystem : MonoBehaviour
     /// Описание сложности замка 
     /// </summary>
     [SerializeField] private AnimationCurve _curve;
-
-
     
+    //врощаем личину
     private bool _lockRotatePressed;
+    
+    // на сколько повернута отмыска
     private float _picklockPhase;
+    
+    // на сколько повернута личина
     private float _lockPhase;
     
+    // здоровье отмычки
     private float _picklockHealh;
     public float PicklockHealhProperty
     {
@@ -51,55 +56,74 @@ public class LockBrakeSystem : MonoBehaviour
             }
         }
     }
-    
-    void Start()
+
+    private static bool _lockBrakeSystemIsRun;
+    public static bool LockBrakeSystemIsRun
+    {
+        get { return _lockBrakeSystemIsRun; }
+
+        set
+        {
+            _lockBrakeSystemIsRun = value;
+        }
+    }
+
+    public async UniTaskVoid Run()
     {
         PicklockHealhProperty = 100;
         
         PicklockRotator.PicklockRotationEvent += PicklockRotationEventHandler;
         LockRotator.LockPhaseEvent += LockPhaseEventHandler;
+        LockRotator.LockRotationPressedEvent += b => _lockRotatePressed = b;
 
         App.RestartAction += () =>
         {
             PicklockHealhProperty = 100;
+            LockBrakeSystemIsRun = true;
+            UpdateSystem().Forget();
         };
-
-        LockRotator.LockRotationPressedEvent += b => _lockRotatePressed = b;
+        
+        LockBrakeSystemIsRun = true;
+        
+        UpdateSystem().Forget();
+        
+        await UniTask.Yield();
     }
 
-    // Update is called once per frame
-    void Update()
+    public async UniTaskVoid UpdateSystem()
     {
-        var value = Mathf.Clamp(_curve.Evaluate(_picklockPhase),0f,1f);
+        while (LockBrakeSystemIsRun)
+        {
+            var value = Mathf.Clamp(_curve.Evaluate(_picklockPhase),0f,1f);
         
-        SetLockColor(value);
+            SetLockColor(value);
 
-        //событие не правильного отпирания
-        if (_lockPhase > value && _lockRotatePressed)
-        {
-            ErrorBreackProperty = true;
-            PicklockHealhProperty -= Time.deltaTime * 100;
-        }
-        else
-        {
-            ErrorBreackProperty = false;
-        }
+            //событие не правильного отпирания
+            if (_lockPhase > value && _lockRotatePressed)
+            {
+                ErrorBreackProperty = true;
+                PicklockHealhProperty -= Time.deltaTime * 100;
+            }
+            else
+            {
+                ErrorBreackProperty = false;
+            }
 
-        //отмычка сломалась
-        if (PicklockHealhProperty <= 0f)
-        {
-            PickLockBrocked?.Invoke();
-        }
+            //отмычка сломалась
+            if (PicklockHealhProperty <= 0f)
+            {
+                LockBrakeSystemIsRun = false;
+                PickLockBrocked?.Invoke();
+            }
 
-        //замок открыт
-        if (_lockPhase >= 1f)
-        {
-            WinAction?.Invoke();
-        }
+            //замок открыт
+            if (_lockPhase >= 1f)
+            {
+                WinAction?.Invoke();
+            }
 
-        /*Debug.Log($"value {value}");
-        Debug.Log($"_lockPhase {_lockPhase}");
-        Debug.Log($"_picklockPhase {_picklockPhase}");*/
+            await UniTask.NextFrame();
+        }
     }
 
     private void SetLockColor(float value)
@@ -123,4 +147,5 @@ public class LockBrakeSystem : MonoBehaviour
     private void LockPhaseEventHandler(float phase) => _lockPhase = phase;
 
     private void PicklockRotationEventHandler(float phase) => _picklockPhase = phase;
+    
 }

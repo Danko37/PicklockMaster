@@ -1,5 +1,5 @@
 using System;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class App : MonoBehaviour
@@ -12,12 +12,19 @@ public class App : MonoBehaviour
 
     public int NumberОfTries { get; set; } = 3;
 
+    public List<IGameSystem> Systems = new()
+    {
+        new LockBrakeGameSystem()
+    };
+
     private void Awake()
     {
         Cursor.visible = false;
+        
+        Systems.ForEach(system => {system.Run().Forget(); });
 
-        LockBrakeSystem.PickLockBrocked += OnPickLockBrockedHandler;
-        LockBrakeSystem.WinAction += OnWinEventHandler;
+        LockBrakeGameSystem.PickLockBrocked += OnPickLockBrockedHandler;
+        LockBrakeGameSystem.WinAction += OnWinEventHandler;
     }
     
     private void OnPickLockBrockedHandler()

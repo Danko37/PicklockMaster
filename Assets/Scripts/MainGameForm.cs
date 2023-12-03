@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameForm : MonoBehaviour
+public class MainGameForm : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _picklockItems;
 
@@ -18,12 +18,9 @@ public class GameForm : MonoBehaviour
 
     private void  SetPicklockItemsVisibility(int triesLeft)
     {
-        foreach (var picklockItem in _picklockItems)
+        for (int i = 0; i < _picklockItems.Count - 1 ; i++)
         {
-            if (picklockItem.activeSelf)
-            {
-                picklockItem.SetActive(false); 
-            }
+            _picklockItems[i].SetActive(i <= triesLeft - 1);
         }
     }
 
