@@ -1,20 +1,20 @@
 using System;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.UI;
 
 public class LockBrakeGameSystem : IGameSystem
 {
+    public class GameParams
+    {
+        public Lock Lock;
+        public PickLock PickLock;
+        public int Time;
+    }
+
     public static event Action WinAction;
     public static event Action PickLockBrocked;
     public static event Action<bool> ErrorBreackAction;
     public static event Action<int> PicklockHealhChangeAction;
-    
-    /// <summary>
-    /// Описание сложности замка 
-    /// </summary>
-    
-    
+
     //врощаем личину
     private bool _lockRotatePressed;
     
@@ -63,11 +63,18 @@ public class LockBrakeGameSystem : IGameSystem
         }
     }
 
+    public Lock CurrentLock { get; set; }
+
+    public void InitGame(GameParams gameParams)
+    {
+        
+    }
+
     public async UniTaskVoid Run()
     {
         PicklockRotator.PicklockRotationEvent += PicklockRotationEventHandler;
-        LockRotator.LockPhaseEvent += LockPhaseEventHandler;
-        LockRotator.LockRotationPressedEvent += b => _lockRotatePressed = b;
+        CurrentLock.LockPhaseEvent += LockPhaseEventHandler;
+        //LockRotator.LockRotationPressedEvent += b => _lockRotatePressed = b;
 
         App.RestartAction += () =>
         {
@@ -124,13 +131,8 @@ public class LockBrakeGameSystem : IGameSystem
         }
     }
 
-    private void SetLockColor(float value)
-    {
-        
-    }
-
     private void LockPhaseEventHandler(float phase) => _lockPhase = phase;
 
     private void PicklockRotationEventHandler(float phase) => _picklockPhase = phase;
-    
+    public string SystemName => nameof(LockBrakeGameSystem);
 }

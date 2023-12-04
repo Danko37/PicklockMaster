@@ -5,23 +5,31 @@ using UnityEngine;
 public class App : MonoBehaviour
 {
     public static event Action RestartAction;
+    public static event Action<int> RoundFail;
     
     [SerializeField] private GameObject WinForm;
     [SerializeField] private GameObject LoseForm;
-    public static event Action<int> RoundFail;
 
+    [SerializeField] private RectTransform LockRoot;
+    
     public int NumberОfTries { get; set; } = 3;
 
+    /// <summary>
+    /// Системы
+    /// </summary>
     public List<IGameSystem> Systems = new()
     {
         new LockBrakeGameSystem()
     };
 
-    private void Awake()
+    private async void Awake()
     {
         Cursor.visible = false;
-        
-        Systems.ForEach(system => {system.Run().Forget(); });
+
+        foreach (var system in Systems)
+        {
+           await StaticSystemsProvider.Push(system);
+        }
 
         LockBrakeGameSystem.PickLockBrocked += OnPickLockBrockedHandler;
         LockBrakeGameSystem.WinAction += OnWinEventHandler;

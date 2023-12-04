@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 637666169605140241}
   - component: {fileID: 7233189786078286041}
   m_Layer: 0
-  m_Name: lock1
+  m_Name: lock2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,7 +68,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0706bba000992dd4c8d4a249eb4cfde2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bcb1532f9fab76e4780a4c0e3927e2a5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 09e76f1067d6de641bc9abafec0b281d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a51bb56548bb62b4998a974f8e1430c3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -236,19 +236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LockPhaseEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7233189786078286041}
-        m_TargetAssemblyTypeName: Lock, Assembly-CSharp
-        m_MethodName: LockRotationPhase
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   LockRotationPressedEvent:
     m_PersistentCalls:
       m_Calls: []
