@@ -39,7 +39,7 @@ public class LockRotator : MonoBehaviour
         _lockRect = GetComponent<RectTransform>();
         _rotation = _lockRect.rotation.eulerAngles;
 
-        LockBrakeGameSystem.ErrorBreackAction += ((value) => isStopRotation = value);
+        LockBrakeGamesService.ErrorBreackAction += ((value) => isStopRotation = value);
         App.RestartAction += (() => { _phase = 0f; });
     }
 

@@ -17,22 +17,23 @@ public class App : MonoBehaviour
     /// <summary>
     /// Системы
     /// </summary>
-    public List<IGameSystem> Systems = new()
+    public List<IGamesService> Services = new()
     {
-        new LockBrakeGameSystem()
+        new LockBrakeGamesService(),
+        new PickLockService()
     };
 
     private async void Awake()
     {
         Cursor.visible = false;
 
-        foreach (var system in Systems)
+        foreach (var system in Services)
         {
            await StaticSystemsProvider.Push(system);
         }
 
-        LockBrakeGameSystem.PickLockBrocked += OnPickLockBrockedHandler;
-        LockBrakeGameSystem.WinAction += OnWinEventHandler;
+        LockBrakeGamesService.PickLockBrocked += OnPickLockBrockedHandler;
+        LockBrakeGamesService.WinAction += OnWinEventHandler;
     }
 
     private void OnPickLockBrockedHandler()
@@ -69,5 +70,11 @@ public class App : MonoBehaviour
         LoseForm.SetActive(false);
         
         Cursor.visible = false;
+    }
+
+    private void OnApplicationQuit()
+    {
+        //при выходе из игры сохраняем сколько у нас есть отмычкек
+        StaticSystemsProvider.Get<PickLockService>().SaveCurrentCount();
     }
 }

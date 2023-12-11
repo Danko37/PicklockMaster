@@ -4,9 +4,9 @@ using Cysharp.Threading.Tasks;
 
 public static class StaticSystemsProvider
 {
-    private static List<IGameSystem> _systems = new();
+    private static List<IGamesService> _systems = new();
 
-    public static async UniTask Push(IGameSystem system)
+    public static async UniTask Push(IGamesService system)
     {
         if (!_systems.Contains(system))
         {
@@ -14,7 +14,7 @@ public static class StaticSystemsProvider
             _systems.Add(system);
         }
     }
-    public static T Get<T>() where T : IGameSystem
+    public static T Get<T>() where T : IGamesService
     {
         var result = _systems.Find(s => s.SystemName == typeof(T).Name);
         

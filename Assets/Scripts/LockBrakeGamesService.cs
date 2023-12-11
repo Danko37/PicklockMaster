@@ -1,19 +1,14 @@
 using System;
 using Cysharp.Threading.Tasks;
 
-public class LockBrakeGameSystem : IGameSystem
+public class LockBrakeGamesService : IGamesService
 {
-    public class GameParams
-    {
-        public Lock Lock;
-        public PickLock PickLock;
-        public int Time;
-    }
-
     public static event Action WinAction;
     public static event Action PickLockBrocked;
     public static event Action<bool> ErrorBreackAction;
     public static event Action<int> PicklockHealhChangeAction;
+
+    public GameParams CurrentGameParams;
 
     //врощаем личину
     private bool _lockRotatePressed;
@@ -63,39 +58,28 @@ public class LockBrakeGameSystem : IGameSystem
         }
     }
 
-    public Lock CurrentLock { get; set; }
-
     public void InitGame(GameParams gameParams)
     {
-        
+        CurrentGameParams = gameParams;
     }
 
-    public async UniTaskVoid Run()
+    public async UniTask Run()
     {
         PicklockRotator.PicklockRotationEvent += PicklockRotationEventHandler;
-        CurrentLock.LockPhaseEvent += LockPhaseEventHandler;
+        CurrentGameParams.Lock.LockPhaseEvent += LockPhaseEventHandler;
         //LockRotator.LockRotationPressedEvent += b => _lockRotatePressed = b;
 
         App.RestartAction += () =>
         {
             PicklockHealhProperty = 100;
             LockBrakeSystemIsRun = true;
-            UpdateSystem().Forget();
         };
         
         LockBrakeSystemIsRun = true;
-        
-        UpdateSystem().Forget();
-        
+
         await UniTask.Yield();
     }
-
-    private void LoadParams()
-    {
-        
-    }
-
-    public async UniTaskVoid UpdateSystem()
+    public async UniTask UpdateSystem()
     {
         while (LockBrakeSystemIsRun)
         {
@@ -134,5 +118,5 @@ public class LockBrakeGameSystem : IGameSystem
     private void LockPhaseEventHandler(float phase) => _lockPhase = phase;
 
     private void PicklockRotationEventHandler(float phase) => _picklockPhase = phase;
-    public string SystemName => nameof(LockBrakeGameSystem);
+    public string SystemName => nameof(LockBrakeGamesService);
 }

@@ -8,11 +8,11 @@ public class MainGameForm : MonoBehaviour
 
     [SerializeField] private GameObject SelectLockPanel;
 
-    private LockBrakeGameSystem _lockBrakeGameSystem;
+    private LockBrakeGamesService _lockBrakeGamesService;
 
     private void Start()
     {
-        _lockBrakeGameSystem =  StaticSystemsProvider.Get<LockBrakeGameSystem>();
+        _lockBrakeGamesService =  StaticSystemsProvider.Get<LockBrakeGamesService>();
         
         App.RoundFail += SetPicklockItemsVisibility;
         App.RestartAction += () => 
