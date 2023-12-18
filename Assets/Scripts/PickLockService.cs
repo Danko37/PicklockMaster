@@ -5,9 +5,17 @@ public class PickLockService : IGamesService
 {
     private const string PICKLOCK_COUNT_PREF_KEY = "picklock_count";
     public int CurrentCount { get; set; }
+
+    public PickLock CurrentPickLock { get; set; }
+
     public async UniTask Run()
     {
-        CurrentCount = PlayerPrefs.GetInt(PICKLOCK_COUNT_PREF_KEY, 0);
+        CurrentCount = PlayerPrefs.GetInt(PICKLOCK_COUNT_PREF_KEY, 3);
+    }
+
+    public void SetCurrentPicklock(PickLock pickLock)
+    {
+        
     }
 
     public void SaveCurrentCount()

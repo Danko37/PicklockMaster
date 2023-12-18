@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class MainGameForm : MonoBehaviour
+public class MainGameForm : UIFormBase
 {
     [SerializeField] private List<GameObject> _picklockItems;
-
-    [SerializeField] private GameObject SelectLockPanel;
 
     private LockBrakeGamesService _lockBrakeGamesService;
 
@@ -40,6 +39,14 @@ public class MainGameForm : MonoBehaviour
     public void LoadLock(string lockPrefabName)
     {
         var currentLock = Resources.Load<Lock>($"Locks/{lockPrefabName}");
+        var gameParams = new GameParams
+        {
+            Lock = currentLock
+        };
+        Instantiate(currentLock.gameObject, Vector3.zero, Quaternion.identity);
+        _lockBrakeGamesService.InitGame(gameParams);
+        _lockBrakeGamesService.UpdateSystem().Forget();
+        StaticSystemsProvider.Get<FormsService>().ShowHideForm<MainGameForm>(false);
     }
 
     #endregion

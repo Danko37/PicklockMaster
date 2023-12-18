@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 public class LockBrakeGamesService : IGamesService
 {
@@ -61,12 +62,13 @@ public class LockBrakeGamesService : IGamesService
     public void InitGame(GameParams gameParams)
     {
         CurrentGameParams = gameParams;
+        CurrentGameParams.Lock.LockPhaseEvent += LockPhaseEventHandler;
     }
 
     public async UniTask Run()
     {
         PicklockRotator.PicklockRotationEvent += PicklockRotationEventHandler;
-        CurrentGameParams.Lock.LockPhaseEvent += LockPhaseEventHandler;
+        
         //LockRotator.LockRotationPressedEvent += b => _lockRotatePressed = b;
 
         App.RestartAction += () =>
@@ -83,9 +85,9 @@ public class LockBrakeGamesService : IGamesService
     {
         while (LockBrakeSystemIsRun)
         {
-            /*var value = Mathf.Clamp(_curve.Evaluate(_picklockPhase),0f,1f);
+            var value = Mathf.Clamp(CurrentGameParams.Lock.Curve.Evaluate(_picklockPhase),0f,1f);
         
-            SetLockColor(value);
+            //SetLockColor(value);
 
             //событие не правильного отпирания
             if (_lockPhase > value && _lockRotatePressed)
@@ -111,7 +113,7 @@ public class LockBrakeGamesService : IGamesService
                 WinAction?.Invoke();
             }
 
-            await UniTask.NextFrame();*/
+            await UniTask.NextFrame();
         }
     }
 

@@ -11,7 +11,9 @@ public class App : MonoBehaviour
     [SerializeField] private GameObject LoseForm;
 
     [SerializeField] private RectTransform LockRoot;
-    
+
+    [SerializeField] private Transform FormsRoot;
+    private static Transform _formsRoot;
     public int NumberОfTries { get; set; } = 3;
 
     /// <summary>
@@ -20,13 +22,16 @@ public class App : MonoBehaviour
     public List<IGamesService> Services = new()
     {
         new LockBrakeGamesService(),
-        new PickLockService()
+        new PickLockService(),
+        new FormsService(_formsRoot)
     };
 
     private async void Awake()
     {
         Cursor.visible = false;
-
+        
+        _formsRoot = FormsRoot;
+        
         foreach (var system in Services)
         {
            await StaticSystemsProvider.Push(system);
@@ -34,6 +39,8 @@ public class App : MonoBehaviour
 
         LockBrakeGamesService.PickLockBrocked += OnPickLockBrockedHandler;
         LockBrakeGamesService.WinAction += OnWinEventHandler;
+
+        StaticSystemsProvider.Get<FormsService>().ShowHideForm<MainGameForm>(true);
     }
 
     private void OnPickLockBrockedHandler()

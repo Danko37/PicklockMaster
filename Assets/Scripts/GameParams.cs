@@ -1,6 +1,6 @@
 public class GameParams
 {
     public Lock Lock;
-    public PickLock PickLock;
+    //public PickLock PickLock;
     public int Time;
 }
